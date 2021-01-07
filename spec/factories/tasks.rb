@@ -3,6 +3,6 @@ FactoryBot.define do
     sequence(:title, "title_1")
     content {'サンプル'}
     status {1}
-    user
+    association :user
   end
 end
