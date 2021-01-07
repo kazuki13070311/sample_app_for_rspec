@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :task do
-    title {'テスト'}
+    sequence(:title, "title_1")
     content {'サンプル'}
     status {1}
     user
