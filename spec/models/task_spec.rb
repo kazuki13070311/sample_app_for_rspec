@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Task, type: :model do
+RSpec.describe Task, type: :system do
   describe 'validation' do
     it 'is valid with all attributes' do
       task = create(:task)
