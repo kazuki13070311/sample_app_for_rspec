@@ -8,7 +8,7 @@ RSpec.describe "Users", type: :system do
     describe 'ユーザー新規登録' do
       context 'フォームの入力値が正常' do
         it 'ユーザーの新規作成が成功する' do
-          visit sign_up_path
+          visit new_user_path
           fill_in 'Email', with: 'test@example.com'
           fill_in 'Password', with: 'password'
           fill_in 'Password confirmation', with: 'password'
@@ -20,25 +20,29 @@ RSpec.describe "Users", type: :system do
         
       context 'メールアドレスが未入力' do
         it 'ユーザーの新規作成が失敗する' do
-          visit sign_up_path
+          visit new_user_path
           fill_in 'Email', with: nil
           fill_in 'Password', with: 'password'
           fill_in 'Password confirmation', with: 'password'
           click_button 'SignUp'
           expect(current_path).to eq users_path
           expect(page).to have_content "Email can't be blank"
+          expect(page).to have_content '1 error prohibited this user from being saved'
         end
       end
 
       context '登録済のメールアドレスを使用' do
         it 'ユーザーの新規作成が失敗する' do
-          visit sign_up_path
-          fill_in 'Email', with: user.email
+          existed_user = create(:user)
+          visit new_user_path
+          fill_in 'Email', with: existed_user.email
           fill_in 'Password', with: 'password'
           fill_in 'Password confirmation', with: 'password'
           click_button 'SignUp'
           expect(current_path).to eq users_path
           expect(page).to have_content "Email has already been taken"
+          expect(page).to have_content '1 error prohibited this user from being saved'
+          expect(page).to have_content 'Email has already been taken'
         end
       end
     end
