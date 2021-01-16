@@ -63,6 +63,31 @@ RSpec.describe "Tasks", type: :system do
           expect(page).to have_content 'Task was successfully created.'
         end
       end
+
+      context 'タイトルが未入力' do
+        it 'タスクの新規作成が失敗する' do
+          visit new_task_path
+          fill_in 'Title', with: nil
+          fill_in 'Content', with: 'test_content'
+          click_button 'Create Task'
+          expect(page).to have_content '1 error prohibited this task from being saved:'
+          expect(page).to have_content "Title can't be blank"
+          expect(current_path).to eq tasks_path
+        end
+      end
+
+      context '登録済のタイトルを入力' do
+        it 'タスクの新規作成が失敗する' do
+          visit new_task_path
+          other_task = create(:task)
+          fill_in 'Title', with: other_task.title
+          fill_in 'Content', with: 'test_content'
+          click_button 'Create Task'
+          expect(page).to have_content '1 error prohibited this task from being saved'
+          expect(page).to have_content 'Title has already been taken'
+          expect(current_path).to eq tasks_path
+        end
+      end
     end
 
     describe 'タスク編集' do
