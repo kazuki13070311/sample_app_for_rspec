@@ -21,6 +21,25 @@ RSpec.describe "Tasks", type: :system do
           expect(page).to have_content 'Login required'
         end
       end
+
+      context 'タスクの詳細ページにアクセス' do
+        it 'タスクの詳細情報が表示される' do
+          visit task_path(task)
+          expect(page).to have_content task.title
+          expect(current_path).to eq task_path(task)
+        end
+      end
+
+      context 'タスクの一覧ページにアクセス' do
+        it 'すべてのユーザーのタスク情報が表示される' do
+          task_list = create_list(:task, 3)
+          visit tasks_path
+          expect(page).to have_content task_list[0].title
+          expect(page).to have_content task_list[1].title
+          expect(page).to have_content task_list[2].title
+          expect(current_path).to eq tasks_path
+        end
+      end
     end
   end
 
@@ -31,10 +50,16 @@ RSpec.describe "Tasks", type: :system do
       context 'フォームの入力値が正常' do
         it 'タスクの新規作成が成功する' do
           visit new_task_path(user)
-          fill_in 'Title' , with: 'テストタイトル'
-          fill_in 'Content', with: 'サンプル'
-          click_button 'Create'
-          expect(current_path).to eq task_path(user)
+          fill_in 'Title' , with: 'test_title'
+          fill_in 'Content', with: 'test_content'
+          select 'doing', from: 'Status'
+          fill_in 'Deadline', with: DateTime.new(2020, 6, 1, 10, 30)
+          click_button 'Create Task'
+          expect(current_path).to eq '/tasks/1'
+          expect(page).to have_content 'Title: test_title'
+          expect(page).to have_content 'Content: test_content'
+          expect(page).to have_content 'Status: doing'
+          expect(page).to have_content 'Deadline: 2020/6/1 10:30'
           expect(page).to have_content 'Task was successfully created.'
         end
       end
