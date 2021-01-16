@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "UserSessions", type: :system do
-  before do
-    driven_by :rack_test
-    driven_by(:selenium_chrome_headless)
-  end
-
   let(:user) { create(:user) }
 
   describe 'ログイン前' do

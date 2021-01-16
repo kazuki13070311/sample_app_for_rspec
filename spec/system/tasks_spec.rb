@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "Tasks", type: :system do
-  before do
-    # driven_by(:selenium_chrome)
-    driven_by(:selenium_chrome_headless)
-  end
-
   let(:user) { create(:user) }
   let(:task) { create(:task) }
 
