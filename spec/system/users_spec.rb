@@ -79,18 +79,21 @@ RSpec.describe "Users", type: :system do
           click_button 'Update'
           expect(current_path).to eq user_path(user)
           expect(page).to have_content "Email can't be blank"
+          expect(page).to have_content "1 error prohibited this user from being saved"
         end
       end
 
       context '登録済のメールアドレスを使用' do
         it 'ユーザーの編集が失敗する' do
           visit edit_user_path(user)
-          fill_in 'Email', with: user.email
+          other_user = create(:user)
+          fill_in 'Email', with: other_user.email
           fill_in 'Password', with: 'password'
           fill_in 'Password confirmation', with: 'password'
           click_button 'Update'
           expect(current_path).to eq user_path(user)
-          expect(page).to have_content "User was successfully updated"
+          expect(page).to have_content "Email has already been taken"
+          expect(page).to have_content "1 error prohibited this user from being saved"
         end
       end
 
