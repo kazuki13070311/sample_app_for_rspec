@@ -25,10 +25,7 @@ RSpec.describe "Tasks", type: :system do
   end
 
   describe 'ログイン後' do
-
-    before do
-      login(user)
-    end
+    before { login(user) }
 
     describe 'タスク新規作成' do
       context 'フォームの入力値が正常' do
@@ -44,13 +41,12 @@ RSpec.describe "Tasks", type: :system do
     end
 
     describe 'タスク編集' do
+      let!(:task) { create(:task, user: user) }
+      let(:other_task) { create(:task, user: user) }
+      before { visit edit_task_path(task) }
+
       context 'フォームの入力値が正常' do
         it 'タスクの編集が成功する' do
-          visit new_task_path(user)
-          fill_in 'Title' , with: 'テストタイトル'
-          fill_in 'Content', with: 'サンプル'
-          click_button 'Create'
-          click_link 'Edit'
           fill_in 'Title' , with: 'テストタイトル1'
           fill_in 'Content', with: 'サンプル1'
           click_button 'Update Task'
@@ -61,12 +57,9 @@ RSpec.describe "Tasks", type: :system do
     end
 
     describe 'タスク削除' do
+      let!(:task) { create(:task, user: user) }
       it 'タスクの削除が成功する' do
-        visit new_task_path(user)
-        fill_in 'Title' , with: 'テストタイトル2'
-        fill_in 'Content', with: 'サンプル2'
-        click_button 'Create'
-        click_link 'Task list'
+        visit tasks_path
         click_link 'Destroy'
         expect {
           page.accept_confirm "Are you sure?"

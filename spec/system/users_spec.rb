@@ -46,7 +46,7 @@ RSpec.describe "Users", type: :system do
     describe 'マイページ' do
       context 'ログインしていない状態' do
         it 'マイページへのアクセスが失敗する' do
-          visit "/users/1"
+          visit user_path(user)
           expect(current_path).to eq login_path
           expect(page).to have_content 'Login required'
         end
@@ -55,10 +55,7 @@ RSpec.describe "Users", type: :system do
   end
 
   describe 'ログイン後' do
-
-    before do
-      login(user)
-    end
+    before { login(user) }
 
     describe 'ユーザー編集' do
       context 'フォームの入力値が正常' do
