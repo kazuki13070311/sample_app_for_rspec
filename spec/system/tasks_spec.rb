@@ -142,14 +142,5 @@ RSpec.describe "Tasks", type: :system do
         expect(current_path).to eq tasks_path
       end
     end
-
-    describe '他ユーザーのタスク編集ページにアクセス' do
-      it '編集ページへのアクセスが失敗する' do
-        visit root_url
-        visit edit_task_path(task)
-        expect(current_path).to eq root_path
-        expect(page).to have_content 'Forbidden access.'
-      end
-    end
   end
 end
